@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    
+    <!-- Adding javascript to enable CSS style for semantic tags pre IE9 -->
+
+    <title>FotoWalla - Viewer - jQueryUI</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta name='description' content='FotoWalla - your trusted online foto gallery.'/>
+    <meta name='apple-mobile-web-app-title' content='FotoWalla'/>
+
+    <!-- Ensure that on IE the page is rendered to the maximum IE spec. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <!-- Used for viewing on mobile devices.  Ensuring the width is correctly infered -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--[if lt IE 9]>
+         <script src="scripts/html5-format-ie8.js"></script>
+    <![endif]-->
+
+    <script src="scripts/jquery-1.9.1.js"></script>
+    <script src="scripts/jquery-ui-1.10.3.custom.js"></script>
+    <script src="scripts/jquery-ui-1.10.3.custom.min.js"></script>
+
+    <link href="css/GalleryViewerExtension.css" rel="stylesheet" />
+    <link href="css/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet" />
+
+    <!-- Browser bar icon (16x16) -->
+    <link href="images/fotowallabrowser.png" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	
+
+    <script>
+        var showNames = true;
+
+        $(document).ready
+        (
+            function ()
+            {
+                /* Setup defaults */
+                $("#imageNavFirst").button({ text: false, icons: { primary: "ui-icon-arrowthickstop-1-w" } });
+                $("#imageNavPrevious").button({ text: false, icons: { primary: "ui-icon-arrowthick-1-w" } });
+                $("#imageNavNext").button({ text: false, icons: { primary: "ui-icon-arrowthick-1-e " } });
+                $("#imageNavLast").button({ text: false, icons: { primary: "ui-icon-arrowthickstop-1-e" } });
+
+                $("#sectNavHor").buttonset();
+                $("#sectNavHor > input").button({ icons: { primary: "ui-icon-bullet" } });
+
+                $("#sectNavHor > input").change(
+                    function (e) {
+
+                        $("#sectNavHor > input").button("option", { icons: { primary: "ui-icon-bullet" } });
+
+                        var button = $(this);
+
+                        if (button.is(":checked")) {
+                            button.button("option", { icons: { primary: "ui-icon-check" } });
+                        }
+                        //else {
+                        //    button.button("option", { icons: { primary: "ui-icon-bullet" } });
+                        //}
+                    });
+
+
+
+                $("#sectNavVert").buttonset();
+                $("#sectNavVert > input").button({ icons: { primary: "ui-icon-bullet" } });
+
+                $("#sectNavVert > input").change(
+                    function (e) {
+
+                        $("#sectNavVert > input").button("option", { icons: { primary: "ui-icon-bullet" } });
+
+                        var button = $(this);
+
+                        if (button.is(":checked")) {
+                            button.button("option", { icons: { primary: "ui-icon-check" } });
+                        }
+                    });
+
+                $("#showSectMenu").button();
+                $("#showSectMenu").click(function () { HideShowMenu(this) });
+
+
+
+
+                $("#sectNavDropDown").menu();
+            }
+        );
+
+    </script>
+
+
+</head> 
+<body id="galleryBody" data-show-names="false" data-show-groupings="true">
+	<header class="HeaderStyle">
+        <h1 class="HeaderStyle"><img src="images/fotowallabrowser.png" height="16" width="16" /> Daves' sweet holidays.</h1>
+        <span class="HeaderStyle">Proper holidays for proper people, taken with a c-a-m-e-r-a and look proper nice.</span>
+	</header>
+
+    <!--
+        <div id="radio">
+
+          <input type="radio" id="radio1" name="radio"><label for="radio1">Section 1</label>
+
+          <input type="radio" id="radio2" name="radio" checked="checked"><label for="radio2">Section 2</label>
+
+          <input type="radio" id="radio3" name="radio"><label for="radio3">Section 3</label>
+
+        </div>
+    -->
+
+    <nav id="imageNav">
+        <button id="imageNavFirst">first</button>
+        <button id="imageNavPrevious">previous</button>
+        <button id="imageNavNext">next</button>
+        <button id="imageNavLast">last</button>
+    </nav>
+
+
+    <nav id="sectNavHor">
+        <input type="radio" id="section-12345" name="sectNavHor" />
+        <label for="section-12345">Section 1</label>
+        <input type="radio" id="Radio4" name="sectNavHor" />
+        <label for="Radio4">Section 2</label>
+        <input type="radio" id="Radio5" name="sectNavHor" />
+        <label for="Radio5">Section 3</label>
+        <input type="radio" id="Radio6" name="sectNavHor" />
+        <label for="Radio6">Section 4</label>
+    </nav>
+
+    <nav id="sectNavVert">
+        <input type="radio" id="Radio1" name="sectNavVert" />
+        <label for="Radio1">Section 1</label>
+        <input type="radio" id="Radio2" name="sectNavVert" />
+        <label for="Radio2">Section 2</label>
+        <input type="radio" id="Radio3" name="sectNavVert" />
+        <label for="Radio3">Section 3</label>
+        <input type="radio" id="Radio7" name="sectNavVert" />
+        <label for="Radio7">Section 4</label>
+    </nav>
+
+    <input type="checkbox" id="showSectMenu" />
+    <label id="currentMenuItem" for="showSectMenu">Current Meu item</label>
+
+    <nav>
+        <ul id="sectNavDropDown">
+          <li><a href="#">Ada</a></li>
+          <li><a href="#">Adamsville</a></li>
+          <li><a href="#">Addyston</a></li>
+        </ul>
+    </nav>
+
+
+</body>
+</html>

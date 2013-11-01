@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    
+    <!-- Adding javascript to enable CSS style for semantic tags pre IE9 -->
+
+    <title>FotoWalla - Viewer</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta name='description' content='FotoWalla - your trusted online foto gallery.'/>
+    <meta name='apple-mobile-web-app-title' content='FotoWalla'/>
+
+    <!-- Ensure that on IE the page is rendered to the maximum IE spec. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <!-- Used for viewing on mobile devices.  Ensuring the width is correctly infered -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--[if lt IE 9]>
+         <script src="scripts/html5-format-ie8.js"></script>
+    <![endif]-->
+
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.2.min.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="css\GalleryViewer.css" />
+
+    <!-- Browser bar icon (16x16) -->
+    <link href="images/fotowallabrowser.png" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	
+
+    <script>
+        var showNames = true;
+
+        $(document).ready
+        (
+            function ()
+            {
+                // jQuery methods go here...
+                $("[data-isgroup='yes']").click(function () { LoadImagePaneRequest(this) });
+                $("header").click(function () { LoadImagePaneResponse() });
+            }
+        );
+
+
+        function LoadImagePaneRequest(meObject)
+        {
+            /* clear down ImagesPane child elements */
+            var imagesPane = document.getElementById("ImagesPane");
+            $(imagesPane).empty();
+
+            /* show loading image */
+
+            /* build url needed for new imageView page */
+
+            /* request page, response will be received by delegate */
+
+            var groupingType = $(meObject).attr("data-grouping-type");
+            alert(groupingType);
+        }
+
+        function LoadImagePaneResponse()
+        {
+            /* Apply response html to the ImagesPane */
+
+            /* Apply stylesheet classes based on Gallery display */
+            //var imagesPane = document.getElementById("ImagesPane");
+
+            var galleryBody = document.getElementById("galleryBody");
+            var showNames = $(galleryBody).attr("data-show-names");
+
+            if (showNames == "false")
+            {
+                $(".ImagesArticleStyle").removeClass("ImagesArticleStyle").addClass("ImagesArticleNoNameStyle");
+            }
+        }
+
+    </script>
+
+
+</head> 
+<body id="galleryBody" data-show-names="false" data-show-groupings="true">
+	<header class="HeaderStyle">
+        <h1 class="HeaderStyle"><img src="images/fotowallabrowser.png" height="16" width="16" /> Daves' sweet holidays.</h1>
+        <span class="HeaderStyle">Proper holidays for proper people, taken with a c-a-m-e-r-a and look proper nice.</span>
+	</header>
+	<nav>
+		<ul class="GroupingStyle">
+		    <li>
+                <a id="grp1234567890" data-grouping-type="tag" data-grouping-id="1515151" data-isgroup="yes">Tag section 1</a>
+		    </li>
+		    <li >
+                <a href="http://www.google.fr" target="imagePane" data-grouping-id="1515151">Tag section 2</a>
+		    </li>
+            <li>
+                <a href="http://www.google.no" target="imagePane" data-grouping-id="1515151">Tag section 3</a>
+		    </li>
+            <li>
+                <a href="http://www.google.co.uk" target="imagePane" data-grouping-id="1515151">Tag section 4</a>
+		    </li>
+		</ul>
+
+        <ul class="ImageNavStyle">
+		    <li>
+                <a href="http://www.google.com" target="imagePane" data-grouping-id="1515151">First</a>
+		    </li>
+		    <li >
+                <a href="http://www.google.fr" target="imagePane" data-grouping-id="1515151">Previous</a>
+		    </li>
+            <li>
+                <a href="http://www.google.no" target="imagePane" data-grouping-id="1515151">Next</a>
+		    </li>
+            <li>
+                <a href="http://www.google.co.uk" target="imagePane" data-grouping-id="1515151">Last</a>
+		    </li>
+		</ul>
+	</nav>
+
+    <section id="ImagesPane" class="ImagesPaneStyle">
+
+        <article class="ImagesArticleStyle" id="imageArticle1234567890" data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle" id="imageArticle234567890" data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle" id="imageArticle34567890" data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle" id="imageArticle4567890" data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+        
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+        
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+        
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+
+        
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+
+        
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+            </article>
+
+            
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+            
+                <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name1</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name2</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name3</span></div>
+        </article>
+        <article class="ImagesArticleStyle"  data-image-id="1234567890">
+            <img alt="Image Name" class="thumbStyle" src="images\055.JPG" />
+            <div class="ImagesArticleStyle"><span>Me Image Name4</span></div>
+        </article>
+
+
+    </section>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<ImageList xmlns="http://www.example.org/ImageList" id="100034" version="3" imageCursor="0" totalImageCount="91">
+	<Name>America</Name>
+	<LastChanged>2013-10-05T21:09:05.783+01:00</LastChanged>
+	<Images>
+		<ImageRef id="100728" categoryId="100034" name="dick1" uploadDate="2013-09-28+01:00" takenDate="1900-01-01Z" localPath="C:\Users\FastEddy\Desktop\TestGallery\difftypes\dick1.jpg" />
+		<ImageRef id="100635" categoryId="100034" name="DSC01851" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01851.JPG" />
+		<ImageRef id="100636" categoryId="100034" name="DSC01852" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01852.JPG" />
+		<ImageRef id="100637" categoryId="100034" name="DSC01854" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01854.JPG" />
+		<ImageRef id="100638" categoryId="100034" name="DSC01855" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01855.JPG" />
+		<ImageRef id="100639" categoryId="100034" name="DSC01856" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01856.JPG" />
+		<ImageRef id="100640" categoryId="100034" name="DSC01857" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01857.JPG" />
+		<ImageRef id="100641" categoryId="100034" name="DSC01858" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01858.JPG" />
+		<ImageRef id="100642" categoryId="100034" name="DSC01859" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01859.JPG" />
+		<ImageRef id="100643" categoryId="100034" name="DSC01860" uploadDate="2013-09-21+01:00" takenDate="1900-01-01Z" localPath="C:\TheDuchess\Images\Holidays\America2008\DSC01860.JPG" />
+	</Images>
+</ImageList>

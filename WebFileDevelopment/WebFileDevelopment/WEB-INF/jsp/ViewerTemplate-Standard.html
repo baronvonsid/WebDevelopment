@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <title>FotoWalla - Viewer</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta name='description' content='FotoWalla - your trusted online foto gallery.' />
+    <meta name='apple-mobile-web-app-title' content='FotoWalla' />
+
+    <!-- Ensure that on IE the page is rendered to the maximum IE spec. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Used for viewing on mobile devices.  Ensuring the width is correctly infered -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Adding javascript to enable CSS style for semantic tags pre IE9 -->
+    <!--[if lt IE 9]>
+         <script src="../../static/scripts/html5-format-ie8.js"></script>
+    <![endif]-->
+
+    <script src="../../static/scripts/jquery-2.0.3.js"></script>
+    <script src="../../static/scripts/jquery-ui-1.10.3.custom.js"></script>
+    <script>
+        var showNames = true;
+        var numberOfImages = 0;
+
+        /*
+        Body - #galleryBody
+        data-show-names="true" 
+        data-images-fetchsize="100" 
+        data-groupings-type="2" 
+    
+        Section - Images - #ImagesPane{sectionId}
+    
+        */
+
+        $(document).ready
+        (
+            function () {
+                /* Setup defaults - run once on document ready */
+                $("#imageNavFirst").button({ text: false, icons: { primary: "ui-icon-arrowthickstop-1-w" } });
+                $("#imageNavPrevious").button({ text: false, icons: { primary: "ui-icon-arrowthick-1-w" } });
+                $("#imageNavNext").button({ text: false, icons: { primary: "ui-icon-arrowthick-1-e " } });
+                $("#imageNavLast").button({ text: false, icons: { primary: "ui-icon-arrowthickstop-1-e" } });
+
+                $("#sectNavHor").buttonset();
+                $("#sectNavHor > input").button({ icons: { primary: "ui-icon-bullet" } });
+
+                var totalImages = $("#imagesPane").attr("data-total-images");
+                ImageNavUpdate($("#imagesPane").attr("data-total-images"), $("#imagesPane").attr("data-images-first"), $("#imagesPane").attr("data-images-last"), $("#galleryBody").attr("data-images-fetchsize"));
+
+                ResizeDiv();
+
+                /* Event hooks */
+
+                $("#sectNavHor > input").change(
+                    function (e) {
+                        $("#sectNavHor > input").button("option", { icons: { primary: "ui-icon-bullet" } });
+                        var button = $(this);
+                        if (button.is(":checked")) {
+                            button.button("option", { icons: { primary: "ui-icon-check" } });
+                        }
+                    });
+
+                $("#imageNavFirst").click(function () { FetchImagesList("first") });
+                $("#imageNavPrevious").click(function () { FetchImagesList("previous") });
+                $("#imageNavNext").click(function () { FetchImagesList("next") });
+                $("#imageNavLast").click(function () { FetchImagesList("last") });
+
+                $("h1").click(function () { RetrieveImageListFromServer("notneeded", 0, 100); });
+
+                
+                $(window).resize(function () { ResizeDiv(); });
+            }
+        );
+
+        function ResizeDiv() {
+            var factor = ($(window).width() - 20) / 204;
+            var proposedNumberOfImages = Math.floor(factor);
+            if (numberOfImages != proposedNumberOfImages) {
+                var newWidth = (proposedNumberOfImages * 204) + 20;
+                $("#imagesPane").width(newWidth.toString() + "px");
+                $("#pageHeader").width(newWidth.toString() + "px");
+                $("#pageNavigations").width(newWidth.toString() + "px");
+                
+                console.info($(window).width() + " " + newWidth);
+                numberOfImages = proposedNumberOfImages;
+            }
+        }
+
+        function ImageNavUpdate(totalImages, imagesFirst, imagesLast, imagesFetchSize) {
+            if (totalImages < 0) {
+                $("#imageNavTextTotal").text("loading images");
+                $("#imageNav").hide();
+                return;
+            }
+
+            $("#imageNavTextTotal").text(totalImages + " images");
+
+            if (totalImages <= imagesFetchSize) {
+                $("#imageNav").hide();
+                return;
+            }
+
+            $("#imageNavTextCursor").text(imagesFirst + " to " + imagesLast);
+
+            if (imagesFirst == 0) {
+                $("#imageNavFirst").button("disable");
+                $("#imageNavPrevious").button("disable");
+                $("#imageNavNext").button("enable");
+                $("#imageNavLast").button("enable");
+                return;
+            }
+
+            if (imagesLast >= totalImages) {
+                $("#imageNavFirst").button("enable");
+                $("#imageNavPrevious").button("enable");
+                $("#imageNavNext").button("disable");
+                $("#imageNavLast").button("disable");
+                return;
+            }
+        }
+
+        function FetchImagesList(direction) {
+            var queryString;
+
+            switch (direction) {
+                case "first":
+                    alert(direction);
+                    break;
+                case "previous":
+                    alert(direction);
+                    break;
+                case "next":
+                    RetrieveImageListFromServer("notneeded", 0, 100);
+                    break;
+                case "last":
+                    alert(direction);
+                    break;
+            }
+        }
+
+        function RetrieveImageListFromServer(galleryName, cursor, size) {
+
+            var url = document.location.pathname + "/0/" + cursor + "/" + size;
+            /* Prepare form for asyncronous request */
+
+            ImageNavUpdate(-1, 0, 0, 0);
+            $("#imagesPane").empty();
+            //TODO add loading images.
+
+            //$.ajax({ url: url, type: "GET", dataType: "xml",success:function(xhr){ResponseSuccess(xhr);});
+            //request.done(function (
+
+
+            $.get(url, null, null, "html").done(function (data, status, jqXHR) { ResponseSuccess(data, status, jqXHR); }).fail(function (data, status, errorThrown) { ResponseFail(data, status, errorThrown); });
+            //alert(response.responseText);
+
+        }
+
+        function ResponseSuccess(data, status, jqXHR) {
+            //alert(jqXHR.responseText);
+
+            $("#imagesPane").html(data);
+
+            //document.createTextNode(data);
+        }
+
+        function ResponseFail(data, status, errorThrown) {
+            alert(errorThrown.toString());
+        }
+    </script>
+
+
+    
+    <link href="../../static/css/GalleryViewerExtension.css" rel="stylesheet" />
+    <link href="../../static/css/ui-darkness/jquery-ui.min.css" rel="stylesheet" />
+    
+
+    <!-- Browser bar icon (16x16) -->
+    <link href="../../static/images/fotowallabrowser.png" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+</head>
+<body id="galleryBody" data-show-names="true" data-images-fetchsize="100" data-groupings-type="2">
+    <header id="pageHeader" class="HeaderStyle">
+        <h1 class="HeaderStyle">
+            <img src="../../static/images/fotowallabrowser.png" height="16" width="16" />
+            Daves' sweet holidays.</h1>
+        <span class="HeaderStyle">Proper holidays for proper people, taken with a c-a-m-e-r-a and look proper nice.</span>
+    </header>
+
+    <nav id="pageNavigations">
+        <nav id="sectNavHor">
+            <input type="radio" id="section-12345" name="sectNavHor" />
+            <label for="section-12345">Section 1</label>
+            <input type="radio" id="Radio4" name="sectNavHor" />
+            <label for="Radio4">Section 2</label>
+            <input type="radio" id="Radio5" name="sectNavHor" />
+            <label for="Radio5">Section 3</label>
+            <input type="radio" id="Radio6" name="sectNavHor" />
+            <label for="Radio6">Section 4</label>
+        </nav>
+
+        <nav id="imageNav">
+            <span id="imageNavTextTotal">2001 images</span>
+            <button id="imageNavFirst">first</button>
+            <button id="imageNavPrevious">previous</button>
+            <span id="imageNavTextCursor">0 to 100</span>
+            <button id="imageNavNext">next</button>
+            <button id="imageNavLast">last</button>
+        </nav>
+    </nav>
+
+
+    <div style="clear: both;"></div>
+
+    <div class="ImagesPaneStyle" id="imagesPaneContainer">
+        <section class="ImagesPaneStyle" id="imagesPane" data-section-id="5" data-images-last="100" data-images-first="0" data-total-images="113" >
+            <article class="ImagesArticleNoNameStyle" id="imageId100578" data-image-id="100578">
+                <img class="thumbStyle" alt="001" src="../../../ws/ssssss/image/100578/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100585" data-image-id="100585">
+                <img class="thumbStyle" alt="001" src="../../../ws/ssssss/image/100585/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100592" data-image-id="100592">
+                <img class="thumbStyle" alt="001" src="../../../ws/ssssss/image/100592/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100579" data-image-id="100579">
+                <img class="thumbStyle" alt="005" src="../../../ws/ssssss/image/100579/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100593" data-image-id="100593">
+                <img class="thumbStyle" alt="005" src="../../../ws/ssssss/image/100593/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100580" data-image-id="100580">
+                <img class="thumbStyle" alt="007" src="../../../ws/ssssss/image/100580/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100230" data-image-id="100230">
+                <img class="thumbStyle" alt="028" src="../../../ws/ssssss/image/100230/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100427" data-image-id="100427">
+                <img class="thumbStyle" alt="030" src="../../../ws/ssssss/image/100427/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100442" data-image-id="100442">
+                <img class="thumbStyle" alt="047" src="../../../ws/ssssss/image/100442/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100444" data-image-id="100444">
+                <img class="thumbStyle" alt="049" src="../../../ws/ssssss/image/100444/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100445" data-image-id="100445">
+                <img class="thumbStyle" alt="051" src="../../../ws/ssssss/image/100445/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100314" data-image-id="100314">
+                <img class="thumbStyle" alt="075" src="../../../ws/ssssss/image/100314/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100367" data-image-id="100367">
+                <img class="thumbStyle" alt="076" src="../../../ws/ssssss/image/100367/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100319" data-image-id="100319">
+                <img class="thumbStyle" alt="082" src="../../../ws/ssssss/image/100319/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100628" data-image-id="100628">
+                <img class="thumbStyle" alt="Alai Valley 2" src="../../../ws/ssssss/image/100628/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100629" data-image-id="100629">
+                <img class="thumbStyle" alt="CNV00024" src="../../../ws/ssssss/image/100629/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100630" data-image-id="100630">
+                <img class="thumbStyle" alt="CNV00035" src="../../../ws/ssssss/image/100630/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100631" data-image-id="100631">
+                <img class="thumbStyle" alt="Cylcing through jiujiang" src="../../../ws/ssssss/image/100631/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100632" data-image-id="100632">
+                <img class="thumbStyle" alt="david" src="../../../ws/ssssss/image/100632/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100633" data-image-id="100633">
+                <img class="thumbStyle" alt="dick1" src="../../../ws/ssssss/image/100633/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100634" data-image-id="100634">
+                <img class="thumbStyle" alt="DSC_0159" src="../../../ws/ssssss/image/100634/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100635" data-image-id="100635">
+                <img class="thumbStyle" alt="DSC01851" src="../../../ws/ssssss/image/100635/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100636" data-image-id="100636">
+                <img class="thumbStyle" alt="DSC01852" src="../../../ws/ssssss/image/100636/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100637" data-image-id="100637">
+                <img class="thumbStyle" alt="DSC01854" src="../../../ws/ssssss/image/100637/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100638" data-image-id="100638">
+                <img class="thumbStyle" alt="DSC01855" src="../../../ws/ssssss/image/100638/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100639" data-image-id="100639">
+                <img class="thumbStyle" alt="DSC01856" src="../../../ws/ssssss/image/100639/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100640" data-image-id="100640">
+                <img class="thumbStyle" alt="DSC01857" src="../../../ws/ssssss/image/100640/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100641" data-image-id="100641">
+                <img class="thumbStyle" alt="DSC01858" src="../../../ws/ssssss/image/100641/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100642" data-image-id="100642">
+                <img class="thumbStyle" alt="DSC01859" src="../../../ws/ssssss/image/100642/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100643" data-image-id="100643">
+                <img class="thumbStyle" alt="DSC01860" src="../../../ws/ssssss/image/100643/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100644" data-image-id="100644">
+                <img class="thumbStyle" alt="DSC01867" src="../../../ws/ssssss/image/100644/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100645" data-image-id="100645">
+                <img class="thumbStyle" alt="DSC01869" src="../../../ws/ssssss/image/100645/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100646" data-image-id="100646">
+                <img class="thumbStyle" alt="DSC01871" src="../../../ws/ssssss/image/100646/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100647" data-image-id="100647">
+                <img class="thumbStyle" alt="DSC01874" src="../../../ws/ssssss/image/100647/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100648" data-image-id="100648">
+                <img class="thumbStyle" alt="DSC01875" src="../../../ws/ssssss/image/100648/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100649" data-image-id="100649">
+                <img class="thumbStyle" alt="DSC01876" src="../../../ws/ssssss/image/100649/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100650" data-image-id="100650">
+                <img class="thumbStyle" alt="DSC01878" src="../../../ws/ssssss/image/100650/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100651" data-image-id="100651">
+                <img class="thumbStyle" alt="DSC01879" src="../../../ws/ssssss/image/100651/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100652" data-image-id="100652">
+                <img class="thumbStyle" alt="DSC01880" src="../../../ws/ssssss/image/100652/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100653" data-image-id="100653">
+                <img class="thumbStyle" alt="DSC01881" src="../../../ws/ssssss/image/100653/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100654" data-image-id="100654">
+                <img class="thumbStyle" alt="DSC01882" src="../../../ws/ssssss/image/100654/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100655" data-image-id="100655">
+                <img class="thumbStyle" alt="DSC01883" src="../../../ws/ssssss/image/100655/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100656" data-image-id="100656">
+                <img class="thumbStyle" alt="DSC01884" src="../../../ws/ssssss/image/100656/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100657" data-image-id="100657">
+                <img class="thumbStyle" alt="DSC01886" src="../../../ws/ssssss/image/100657/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100658" data-image-id="100658">
+                <img class="thumbStyle" alt="DSC01887" src="../../../ws/ssssss/image/100658/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100659" data-image-id="100659">
+                <img class="thumbStyle" alt="DSC01888" src="../../../ws/ssssss/image/100659/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100660" data-image-id="100660">
+                <img class="thumbStyle" alt="DSC01889" src="../../../ws/ssssss/image/100660/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100661" data-image-id="100661">
+                <img class="thumbStyle" alt="DSC01890" src="../../../ws/ssssss/image/100661/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100662" data-image-id="100662">
+                <img class="thumbStyle" alt="DSC01891" src="../../../ws/ssssss/image/100662/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100663" data-image-id="100663">
+                <img class="thumbStyle" alt="DSC01892" src="../../../ws/ssssss/image/100663/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100664" data-image-id="100664">
+                <img class="thumbStyle" alt="DSC01893" src="../../../ws/ssssss/image/100664/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100665" data-image-id="100665">
+                <img class="thumbStyle" alt="DSC01894" src="../../../ws/ssssss/image/100665/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100666" data-image-id="100666">
+                <img class="thumbStyle" alt="DSC01896" src="../../../ws/ssssss/image/100666/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100667" data-image-id="100667">
+                <img class="thumbStyle" alt="DSC01897" src="../../../ws/ssssss/image/100667/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100668" data-image-id="100668">
+                <img class="thumbStyle" alt="DSC01898" src="../../../ws/ssssss/image/100668/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100669" data-image-id="100669">
+                <img class="thumbStyle" alt="DSC01901" src="../../../ws/ssssss/image/100669/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100670" data-image-id="100670">
+                <img class="thumbStyle" alt="DSC01903" src="../../../ws/ssssss/image/100670/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100671" data-image-id="100671">
+                <img class="thumbStyle" alt="DSC01904" src="../../../ws/ssssss/image/100671/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100672" data-image-id="100672">
+                <img class="thumbStyle" alt="DSC01906" src="../../../ws/ssssss/image/100672/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100673" data-image-id="100673">
+                <img class="thumbStyle" alt="DSC01907" src="../../../ws/ssssss/image/100673/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100674" data-image-id="100674">
+                <img class="thumbStyle" alt="DSC01908" src="../../../ws/ssssss/image/100674/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100675" data-image-id="100675">
+                <img class="thumbStyle" alt="DSC01909" src="../../../ws/ssssss/image/100675/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100676" data-image-id="100676">
+                <img class="thumbStyle" alt="DSC01910" src="../../../ws/ssssss/image/100676/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100677" data-image-id="100677">
+                <img class="thumbStyle" alt="DSC01911" src="../../../ws/ssssss/image/100677/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100678" data-image-id="100678">
+                <img class="thumbStyle" alt="DSC01912" src="../../../ws/ssssss/image/100678/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100679" data-image-id="100679">
+                <img class="thumbStyle" alt="DSC01914" src="../../../ws/ssssss/image/100679/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100680" data-image-id="100680">
+                <img class="thumbStyle" alt="DSC01915" src="../../../ws/ssssss/image/100680/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100681" data-image-id="100681">
+                <img class="thumbStyle" alt="DSC01921" src="../../../ws/ssssss/image/100681/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100682" data-image-id="100682">
+                <img class="thumbStyle" alt="DSC01922" src="../../../ws/ssssss/image/100682/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100683" data-image-id="100683">
+                <img class="thumbStyle" alt="DSC01923" src="../../../ws/ssssss/image/100683/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100684" data-image-id="100684">
+                <img class="thumbStyle" alt="DSC01925" src="../../../ws/ssssss/image/100684/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100685" data-image-id="100685">
+                <img class="thumbStyle" alt="DSC01927" src="../../../ws/ssssss/image/100685/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100686" data-image-id="100686">
+                <img class="thumbStyle" alt="DSC01928" src="../../../ws/ssssss/image/100686/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100687" data-image-id="100687">
+                <img class="thumbStyle" alt="DSC01930" src="../../../ws/ssssss/image/100687/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100688" data-image-id="100688">
+                <img class="thumbStyle" alt="DSC01931" src="../../../ws/ssssss/image/100688/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100689" data-image-id="100689">
+                <img class="thumbStyle" alt="DSC01932" src="../../../ws/ssssss/image/100689/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100690" data-image-id="100690">
+                <img class="thumbStyle" alt="DSC01933" src="../../../ws/ssssss/image/100690/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100691" data-image-id="100691">
+                <img class="thumbStyle" alt="DSC01934" src="../../../ws/ssssss/image/100691/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100692" data-image-id="100692">
+                <img class="thumbStyle" alt="DSC01935" src="../../../ws/ssssss/image/100692/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100693" data-image-id="100693">
+                <img class="thumbStyle" alt="DSC01936" src="../../../ws/ssssss/image/100693/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100694" data-image-id="100694">
+                <img class="thumbStyle" alt="DSC01937" src="../../../ws/ssssss/image/100694/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100695" data-image-id="100695">
+                <img class="thumbStyle" alt="DSC01939" src="../../../ws/ssssss/image/100695/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100696" data-image-id="100696">
+                <img class="thumbStyle" alt="DSC01941" src="../../../ws/ssssss/image/100696/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100697" data-image-id="100697">
+                <img class="thumbStyle" alt="DSC01942" src="../../../ws/ssssss/image/100697/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100698" data-image-id="100698">
+                <img class="thumbStyle" alt="DSC01946" src="../../../ws/ssssss/image/100698/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100699" data-image-id="100699">
+                <img class="thumbStyle" alt="DSC01948" src="../../../ws/ssssss/image/100699/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100700" data-image-id="100700">
+                <img class="thumbStyle" alt="DSC01953" src="../../../ws/ssssss/image/100700/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100701" data-image-id="100701">
+                <img class="thumbStyle" alt="DSC01954" src="../../../ws/ssssss/image/100701/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100702" data-image-id="100702">
+                <img class="thumbStyle" alt="DSC01955" src="../../../ws/ssssss/image/100702/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100703" data-image-id="100703">
+                <img class="thumbStyle" alt="DSC01956" src="../../../ws/ssssss/image/100703/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100704" data-image-id="100704">
+                <img class="thumbStyle" alt="DSC01957" src="../../../ws/ssssss/image/100704/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100705" data-image-id="100705">
+                <img class="thumbStyle" alt="DSC01958" src="../../../ws/ssssss/image/100705/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100706" data-image-id="100706">
+                <img class="thumbStyle" alt="DSC01959" src="../../../ws/ssssss/image/100706/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100707" data-image-id="100707">
+                <img class="thumbStyle" alt="DSC01960" src="../../../ws/ssssss/image/100707/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100708" data-image-id="100708">
+                <img class="thumbStyle" alt="DSC01961" src="../../../ws/ssssss/image/100708/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100709" data-image-id="100709">
+                <img class="thumbStyle" alt="DSC01963" src="../../../ws/ssssss/image/100709/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100710" data-image-id="100710">
+                <img class="thumbStyle" alt="DSC01964" src="../../../ws/ssssss/image/100710/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100711" data-image-id="100711">
+                <img class="thumbStyle" alt="DSC01965" src="../../../ws/ssssss/image/100711/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100712" data-image-id="100712">
+                <img class="thumbStyle" alt="DSC01966" src="../../../ws/ssssss/image/100712/200">
+            </article>
+            <article class="ImagesArticleNoNameStyle" id="imageId100713" data-image-id="100713">
+                <img class="thumbStyle" alt="DSC01967" src="../../../ws/ssssss/image/100713/200">
+            </article>
+        </section>
+    </div>
+
+
+</body>
+</html>
