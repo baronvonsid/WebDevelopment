@@ -175,7 +175,7 @@
     <Content Include="static\images\055.JPG" />
     <Content Include="hack\500px.html" />
     <Content Include="GalleryViewer1.html" />
-    <Content Include="static\css\GalleryViewer.css" />
+    <Content Include="hack\GalleryViewer.css" />
     <Content Include="static\images\loader.gif" />
     <Content Include="hack\500px.js" />
     <Content Include="static\scripts\FotoWalla.js" />
